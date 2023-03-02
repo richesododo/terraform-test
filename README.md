@@ -1,53 +1,38 @@
 # Terraform IAM RBAC Implementation for Four different set of users in an AWS Account
 
-This Terraform project aims to create an IAM (Identity and Access Management) RBAC (Role-Based Access Control) implementation for four different set of users (Frontend Engineer, Backend Engineer, Data Enguneer, Site reliability Engineer)in an AWS account. The project will create the necessary resources such as IAM roles, policies, and permissions to enforce the desired access control for each category of users.
+## Overview
+This Terraform code creates AWS IAM roles named after each group intended for and attaches the required corresponding policy to each.
 
-## Prerequisites
-AWS account credentials
-Terraform installed (version 0.13.0 or later)
+Each IAM role is allowing only specific users to assume the role, as specified in the "assume_role_policy" blocks. The policy statement allows only the AWS IAM users specified in the "*_allowed_users" variable to assume the role.
 
-## Getting Started
+The second resource, "aws_iam_role_policy_attachment", attaches the required policy to the IAM role created in the first resource. This policy provides full access to rources required by each group distinctively.
 
-1. Clone this repository to your local machine.
+## How Users of the System are managed
+The users are managed using AWS Identity and Access Management (IAM) which is the service that allows you to manage access to AWS resources. By using IAM, users access to the AWS resources are controlled and it is ensured that only authorized users are able to access resources based on permission granted. User activities can also be audited to track who accessed what resources and when, and security best practices such as multi-factor authentication and password policies enforced.
 
-2. Change into the cloned directory.
+## Assumptions
+The code assumes that the AWS provider has been configured with the appropriate access and secret keys, and that the region and account ID are correct.
 
-    '''
-    cd terraform-test/
-    '''
+The code assumes that the variables used in the code (e.g "frontend_name") have been defined with the correct values.
 
-3. Initialize Terraform.
+The code assumes that the policies attached are appropriate for the needs of the IAM role being created. Depending on the specific requirements of the application, other policies may be needed to provide the necessary permissions.
 
-    '''
-    terraform init
-    '''
+The code assumes that the IAM role is being created in the correct AWS account and region. If the code is used across multiple accounts or regions, additional configuration may be needed to ensure that the role is created in the appropriate context.
 
-4. Modify the variables.tf file with your desired values for each variable.
+The code assumes that the resources being created do not already exist, and that there are no conflicts with existing resources. If conflicts do exist, additional configuration may be needed to reconcile the differences.
 
-5. Apply the Terraform configuration.
+## Next steps
+Other steps would follow depending on the specific needs and goals of the application. It's important to continuously review and improve the infrastructure over time, to ensure that it remains secure, reliable, and efficient
+Creating a Terraform module that encapsulates this code, to make it easier to use and maintain across different environments. 
+A few steps are:
 
-    '''
-    terraform apply
-    '''
+Setting up monitoring and alerting for the IAM role, to detect and respond to any suspicious or unexpected behavior.
 
-7. Verify that the IAM roles, policies, and permissions were created correctly by checking the AWS Management Console or running the following command:
+Reviewing and updating the IAM policies and roles periodically, to ensure that they are still appropriate and in line with security best practices.
 
-    '''
-    terraform state list
-    '''
-## How it Works
+Exploring additional AWS services that could be used to enhance the project.
 
-This project uses Terraform to create IAM roles, policies, and permissions to enforce RBAC for four different set of users in an AWS account. The allowed_users variable in the variables.tf file is a map of the four set of users, where the key is the group name and the value is a list of strings with the AWS resource names that this team should have access to.
+Implementing automated testing and deployment pipelines, to ensure that changes to the infrastructure are tested and deployed safely and consistently.
 
-The project creates an IAM role for each set of users, and each role has a corresponding policy that grants the users access to the resources specified in the users variable. The project also creates a policy that restricts access to IAM resources, so that only authorized users can modify IAM roles and policies.
+Documenting the IAM policies and roles, and any other infrastructure components, to help with troubleshooting and onboarding new team members.
 
-
-## Cleaning Up
-
-To delete all the resources created by this Terraform project, run the following command:
-terraform destroy
-
-This will remove all the IAM roles, policies, and permissions that were created by this project.
-
-## Conclusion
-This Terraform project provides a simple and scalable solution for enforcing RBAC for multiple groups in an AWS account. With just a few modifications to the variables.tf file, you can customize the access control for your own team structure.
